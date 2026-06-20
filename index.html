@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>20 Member Chit Draw</title>
+<style>
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  min-height: 100vh;
+  padding: 20px;
+}
+
+.container {
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+h1 {
+  color: white;
+  text-align: center;
+  margin-bottom: 10px;
+  font-size: 32px;
+  text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+}
+
+h3 {
+  color: rgba(255,255,255,0.9);
+  text-align: center;
+  margin-bottom: 25px;
+  font-weight: normal;
+}
+
+.card {
+  background: white;
+  padding: 25px;
+  margin: 15px 0;
+  border-radius: 12px;
+  box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 20px rgba(0,0,0,0.3);
+}
+
+h2 {
+  color: #333;
+  margin-bottom: 15px;
+  border-bottom: 2px solid #667eea;
+  padding-bottom: 10px;
+}
+
+.button-group {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+button {
+  padding: 12px 24px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  border: none;
+  border-radius: 8px;
+  transition: all 0.3s ease;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  box-shadow: 0 4px 8px rgba(102, 126, 234, 0.4);
+}
+
+.btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 12px rgba(102, 126, 234, 0.6);
+}
+
+.btn-primary:active {
+  transform: translateY(0);
+}
+
+.btn-secondary {
+  background: #f0f0f0;
+  color: #333;
+  border: 2px solid #ddd;
+}
+
+.btn-secondary:hover {
+  background: #e0e0e0;
+  border-color: #999;
+}
+
+.winner-area {
+  text-align: center;
+  min-height: 120px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+}
+
+.winner {
+  font-size: 24px;
+  font-weight: bold;
+  color: #764ba2;
+  margin: 10px 0;
+  padding: 12px;
+  background: #f0e6ff;
+  border-radius: 8px;
+  border-left: 4px solid #667eea;
+}
+
+.no-draw {
+  color: #999;
+  font-style: italic;
+}
+
+.members-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  gap: 10px;
+  text-align: left;
+}
+
+.member-item {
+  background: #f5f5f5;
+  padding: 12px;
+  border-radius: 6px;
+  border-left: 4px solid #667eea;
+  transition: all 0.2s ease;
+}
+
+.member-item:hover {
+  background: #e8e8e8;
+  transform: translateX(4px);
+}
+
+.members-count {
+  color: #666;
+  font-size: 14px;
+  margin-top: 10px;
+  text-align: center;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 10px;
+}
+
+th, td {
+  border: 1px solid #ddd;
+  padding: 12px;
+  text-align: left;
+}
+
+th {
+  background: #667eea;
+  color: white;
+  font-weight: 600;
+}
+
+tr:nth-child(even) {
+  background: #f9f9f9;
+}
+
+tr:hover {
+  background: #f0e6ff;
+}
+
+.empty-state {
+  text-align: center;
+  color: #999;
+  padding: 20px;
+  font-style: italic;
+}
+
+@media (max-width: 600px) {
+  h1 {
+    font-size: 24px;
+  }
+
+  .card {
+    padding: 15px;
+  }
+
+  .members-list {
+    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+  }
+
+  .button-group {
+    flex-direction: column;
+  }
+
+  button {
+    width: 100%;
+  }
+}
+</style>
+</head>
+<body>
+<div class="container">
+  <h1>🎉 Chit Fund Draw</h1>
+  <h3>20 Members • 2 Winners Per Month</h3>
+
+  <div class="card">
+    <div class="button-group">
+      <button class="btn-primary" onclick="drawTwoWinners()">🎲 Draw 2 Winners</button>
+      <button class="btn-secondary" onclick="resetDraw()">🔄 Reset All</button>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>🏆 Current Winners</h2>
+    <div class="winner-area" id="winnerArea">
+      <span class="no-draw">No draw performed yet.</span>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>👥 Remaining Members</h2>
+    <div class="members-list" id="remainingMembers"></div>
+    <div class="members-count" id="memberCount"></div>
+  </div>
+
+  <div class="card">
+    <h2>📋 Draw History</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>Month</th>
+          <th>Winner 1</th>
+          <th>Winner 2</th>
+        </tr>
+      </thead>
+      <tbody id="historyTable">
+        <tr>
+          <td colspan="3" class="empty-state">No draws yet.</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<script>
+const originalMembers = [
+  "Satyavathi",
+  "Swarnalatha",
+  "Manasvith",
+  "Mithranjan",
+  "Pravalika",
+  "Sushma",
+  "Swetha",
+  "Anudruthi",
+  "Suresh Goud",
+  "Uma",
+  "Manisha",
+  "Srujana",
+  "Manju",
+  "Chitti",
+  "Saritha",
+  "Jayasree",
+  "Suri Friend",
+  "Shivani",
+  "Prasanna",
+  "Pinky"
+];
+
+let members = JSON.parse(localStorage.getItem("members")) || [...originalMembers];
+let history = JSON.parse(localStorage.getItem("history")) || [];
+
+function saveData() {
+  localStorage.setItem("members", JSON.stringify(members));
+  localStorage.setItem("history", JSON.stringify(history));
+}
+
+function updateScreen() {
+  // Update remaining members
+  if (members.length === 0) {
+    document.getElementById("remainingMembers").innerHTML = 
+      '<div class="empty-state">All members have been selected! Reset to start again.</div>';
+    document.getElementById("memberCount").innerHTML = '';
+  } else {
+    document.getElementById("remainingMembers").innerHTML =
+      members.map(m => `<div class="member-item">✓ ${m}</div>`).join("");
+    document.getElementById("memberCount").innerHTML = 
+      `<strong>${members.length}</strong> members remaining (${20 - members.length} selected)`;
+  }
+
+  // Update history table
+  if (history.length === 0) {
+    document.getElementById("historyTable").innerHTML = 
+      '<tr><td colspan="3" class="empty-state">No draws yet.</td></tr>';
+  } else {
+    document.getElementById("historyTable").innerHTML = history
+      .map(h => `
+        <tr>
+          <td><strong>${h.month}</strong></td>
+          <td>${h.w1}</td>
+          <td>${h.w2}</td>
+        </tr>
+      `).join("");
+  }
+}
+
+function randomIndex(max) {
+  return Math.floor(Math.random() * max);
+}
+
+function drawTwoWinners() {
+  if (members.length < 2) {
+    alert("⚠️ Not enough members remaining! You need at least 2 members to draw.\n\nTotal members selected: " + (20 - members.length));
+    return;
+  }
+
+  // First winner
+  let idx1 = randomIndex(members.length);
+  let winner1 = members.splice(idx1, 1)[0];
+
+  // Second winner
+  let idx2 = randomIndex(members.length);
+  let winner2 = members.splice(idx2, 1)[0];
+
+  // Add to history
+  let monthNo = history.length + 1;
+  history.push({
+    month: "Month " + monthNo,
+    w1: winner1,
+    w2: winner2
+  });
+
+  // Display winners
+  document.getElementById("winnerArea").innerHTML = `
+    <div class="winner">🏆 ${winner1}</div>
+    <div class="winner">🏆 ${winner2}</div>
+  `;
+
+  // Save and update
+  saveData();
+  updateScreen();
+
+  // Completion message
+  if (members.length === 0) {
+    setTimeout(() => {
+      alert("✅ All 20 members have completed the chit cycle!\n\nClick 'Reset All' to start a new cycle.");
+    }, 300);
+  }
+}
+
+function resetDraw() {
+  if (confirm("🔄 Are you sure you want to reset all draw history and start again?\n\nThis action cannot be undone.")) {
+    members = [...originalMembers];
+    history = [];
+    localStorage.removeItem("members");
+    localStorage.removeItem("history");
+    document.getElementById("winnerArea").innerHTML = '<span class="no-draw">No draw performed yet.</span>';
+    updateScreen();
+    alert("✅ Draw reset successfully!");
+  }
+}
+
+// Initialize on page load
+updateScreen();
+</script>
+</body>
+</html>
