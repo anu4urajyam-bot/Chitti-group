@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chitti Group - Chit Fund Draw</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+            color: #333;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .header {
+            text-align: center;
+            color: white;
+            margin-bottom: 30px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+        }
+
+        .header h1 {
+            font-size: 48px;
+            margin-bottom: 10px;
+            animation: slideDown 0.6s ease;
+        }
+
+        .header p {
+            font-size: 18px;
+            opacity: 0.9;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .card {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            margin: 20px 0;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            animation: fadeIn 0.5s ease;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .card h2 {
+            color: #667eea;
+            margin-bottom: 20px;
+            border-bottom: 3px solid #667eea;
+            padding-bottom: 10px;
+            font-size: 24px;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        button {
+            padding: 14px 28px;
+            font-size: 16px;
+            font-weight: 700;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .btn-draw {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-draw:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.6);
+        }
+
+        .btn-draw:active {
+            transform: translateY(-1px);
+        }
+
+        .btn-reset {
+            background: #f0f0f0;
+            color: #333;
+            border: 2px solid #ddd;
+        }
+
+        .btn-reset:hover {
+            background: #e0e0e0;
+            border-color: #999;
+        }
+
+        .winners-section {
+            text-align: center;
+            min-height: 180px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .winner-box {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+            padding: 25px;
+            border-radius: 12px;
+            font-size: 28px;
+            font-weight: bold;
+            box-shadow: 0 8px 20px rgba(245, 87, 108, 0.3);
+            min-width: 300px;
+            animation: popIn 0.5s ease;
+        }
+
+        @keyframes popIn {
+            0% {
+                opacity: 0;
+                transform: scale(0.8);
+            }
+            100% {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        .no-draw-yet {
+            color: #999;
+            font-size: 18px;
+            font-style: italic;
+        }
+
+        .members-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+            gap: 12px;
+            margin: 20px 0;
+        }
+
+        .member-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 15px;
+            border-radius: 10px;
+            text-align: center;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+        }
+
+        .member-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(102, 126, 234, 0.5);
+        }
+
+        .members-count {
+            text-align: center;
+            margin: 20px 0;
+            font-size: 16px;
+            color: #666;
+        }
+
+        .members-count strong {
+            color: #667eea;
+            font-size: 20px;
+        }
+
+        .history-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+        }
+
+        .history-table th {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 15px;
+            text-align: left;
+            font-weight: 700;
+        }
+
+        .history-table td {
+            padding: 12px 15px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .history-table tr:nth-child(even) {
+            background: #f9f9f9;
+        }
+
+        .history-table tr:hover {
+            background: #f0e6ff;
+            transition: 0.3s ease;
+        }
+
+        .no-history {
+            text-align: center;
+            padding: 30px;
+            color: #999;
+            font-style: italic;
+        }
+
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 36px;
+            }
+
+            .card {
+                padding: 20px;
+                margin: 15px 0;
+            }
+
+            .members-grid {
+                grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+                gap: 10px;
+            }
+
+            .button-group {
+                flex-direction: column;
+            }
+
+            button {
+                width: 100%;
+            }
+
+            .winner-box {
+                font-size: 22px;
+                padding: 20px;
+                min-width: 250px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .header h1 {
+                font-size: 28px;
+            }
+
+            .card {
+                padding: 15px;
+            }
+
+            .members-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .winner-box {
+                font-size: 18px;
+                padding: 15px;
+                min-width: 200px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🎉 Chitti Group - Chit Fund Draw</h1>
+            <p>20 Members • 2 Winners Every Month</p>
+        </div>
+
+        <div class="card">
+            <h2>🎲 Start the Draw</h2>
+            <div class="button-group">
+                <button class="btn-draw" onclick="drawWinners()">Draw 2 Winners</button>
+                <button class="btn-reset" onclick="resetAll()">Reset All</button>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2>🏆 This Month's Winners</h2>
+            <div class="winners-section" id="winnersDisplay">
+                <div class="no-draw-yet">No draw performed yet</div>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2>👥 Remaining Members</h2>
+            <div class="members-grid" id="membersDisplay"></div>
+            <div class="members-count" id="countDisplay"></div>
+        </div>
+
+        <div class="card">
+            <h2>📋 Draw History</h2>
+            <table class="history-table" id="historyDisplay">
+                <thead>
+                    <tr>
+                        <th>Month</th>
+                        <th>Winner 1</th>
+                        <th>Winner 2</th>
+                    </tr>
+                </thead>
+                <tbody id="historyBody">
+                    <tr>
+                        <td colspan="3" class="no-history">No draws yet</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <script>
+        const MEMBERS = [
+            "Satyavathi",
+            "Swarnalatha",
+            "Manasvith",
+            "Mithranjan",
+            "Pravalika",
+            "Sushma",
+            "Swetha",
+            "Anudruthi",
+            "Suresh Goud",
+            "Uma",
+            "Manisha",
+            "Srujana",
+            "Manju",
+            "Chitti",
+            "Saritha",
+            "Jayasree",
+            "Suri Friend",
+            "Shivani",
+            "Prasanna",
+            "Pinky"
+        ];
+
+        let remainingMembers = JSON.parse(localStorage.getItem("remainingMembers")) || [...MEMBERS];
+        let drawHistory = JSON.parse(localStorage.getItem("drawHistory")) || [];
+
+        function saveToLocalStorage() {
+            localStorage.setItem("remainingMembers", JSON.stringify(remainingMembers));
+            localStorage.setItem("drawHistory", JSON.stringify(drawHistory));
+        }
+
+        function updateDisplay() {
+            updateMembersDisplay();
+            updateHistoryDisplay();
+        }
+
+        function updateMembersDisplay() {
+            const membersDisplay = document.getElementById("membersDisplay");
+            const countDisplay = document.getElementById("countDisplay");
+
+            if (remainingMembers.length === 0) {
+                membersDisplay.innerHTML = '<div style="grid-column: 1 / -1; text-align: center; color: #999; padding: 30px;">All members selected! Click Reset to start over.</div>';
+                countDisplay.innerHTML = '';
+            } else {
+                membersDisplay.innerHTML = remainingMembers
+                    .map(member => `<div class="member-card">✓ ${member}</div>`)
+                    .join('');
+                countDisplay.innerHTML = `<strong>${remainingMembers.length}</strong> members remaining (${20 - remainingMembers.length} selected)`;
+            }
+        }
+
+        function updateHistoryDisplay() {
+            const historyBody = document.getElementById("historyBody");
+
+            if (drawHistory.length === 0) {
+                historyBody.innerHTML = '<tr><td colspan="3" class="no-history">No draws yet</td></tr>';
+            } else {
+                historyBody.innerHTML = drawHistory
+                    .map(draw => `
+                        <tr>
+                            <td><strong>${draw.month}</strong></td>
+                            <td>${draw.winner1}</td>
+                            <td>${draw.winner2}</td>
+                        </tr>
+                    `)
+                    .join('');
+            }
+        }
+
+        function drawWinners() {
+            if (remainingMembers.length < 2) {
+                alert("❌ Not enough members! Need at least 2 members to draw.\n\nMembers selected: " + (20 - remainingMembers.length));
+                return;
+            }
+
+            // Draw first winner
+            const idx1 = Math.floor(Math.random() * remainingMembers.length);
+            const winner1 = remainingMembers[idx1];
+            remainingMembers.splice(idx1, 1);
+
+            // Draw second winner
+            const idx2 = Math.floor(Math.random() * remainingMembers.length);
+            const winner2 = remainingMembers[idx2];
+            remainingMembers.splice(idx2, 1);
+
+            // Add to history
+            const monthNumber = drawHistory.length + 1;
+            drawHistory.push({
+                month: `Month ${monthNumber}`,
+                winner1: winner1,
+                winner2: winner2
+            });
+
+            // Display winners
+            displayWinners(winner1, winner2);
+
+            // Save data
+            saveToLocalStorage();
+            updateDisplay();
+
+            // Check if all members drawn
+            if (remainingMembers.length === 0) {
+                setTimeout(() => {
+                    alert("✅ All 20 members have been selected!\n\nClick 'Reset All' to start a new cycle.");
+                }, 500);
+            }
+        }
+
+        function displayWinners(winner1, winner2) {
+            const winnersDisplay = document.getElementById("winnersDisplay");
+            winnersDisplay.innerHTML = `
+                <div class="winner-box">🏆 ${winner1}</div>
+                <div class="winner-box">🏆 ${winner2}</div>
+            `;
+        }
+
+        function resetAll() {
+            if (confirm("🔄 Reset all data and start fresh?\n\nThis cannot be undone!")) {
+                remainingMembers = [...MEMBERS];
+                drawHistory = [];
+                saveToLocalStorage();
+
+                document.getElementById("winnersDisplay").innerHTML = '<div class="no-draw-yet">No draw performed yet</div>';
+                updateDisplay();
+
+                alert("✅ All data reset! Ready for new draws.");
+            }
+        }
+
+        // Initialize on page load
+        updateDisplay();
+    </script>
+</body>
+</html>
